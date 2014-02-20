@@ -9,27 +9,27 @@ import java.util.List;
 
 public class ProfileManager {
 
-	private HashMap<Date, List<Muscle>> lSet;
+	private HashMap<Date, List<Muscle>> pMap;
 
 	public ProfileManager() {
-		lSet = new HashMap<Date, List<Muscle>>();
+		pMap = new HashMap<Date, List<Muscle>>();
 	}
 
 	public HashMap<Date, List<Muscle>> getlSet() {
-		return lSet;
+		return pMap;
 	}
 
 	//ret true if add is successful
 	public boolean addLog(Date d, Muscle m) {
-		if (!lSet.containsKey(d)) {
+		if (!pMap.containsKey(d)) {
 			ArrayList<Muscle> mList = new ArrayList<Muscle>();
 			mList.add(m);
-			lSet.put(d, mList);
+			pMap.put(d, mList);
 			return true;
-		} else if (lSet.containsKey(d) && !lSet.get(d).contains(m)) {
-			List<Muscle> mList = lSet.get(d);
+		} else if (pMap.containsKey(d) && !pMap.get(d).contains(m)) {
+			List<Muscle> mList = pMap.get(d);
 			mList.add(m);
-			lSet.put(d, mList);
+			pMap.put(d, mList);
 			return true;
 		} else return false;
 	}
@@ -47,8 +47,8 @@ public class ProfileManager {
 		int timesUsed = 0;
 		for (;day>0;day--) {
 			cal.add(Calendar.HOUR, -24);
-			if (lSet.containsKey(cal.getTime())){
-				if (lSet.get(cal).contains(m))
+			if (pMap.containsKey(cal.getTime())){
+				if (pMap.get(cal).contains(m))
 					timesUsed++;				
 			} else break;
 		}

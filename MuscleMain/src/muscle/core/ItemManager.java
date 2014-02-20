@@ -7,8 +7,8 @@ import java.util.ArrayList;
 class Muscle {
 	String muscle;
 	
-	Muscle (String act) {
-		muscle = act;
+	Muscle (String mus) {
+		muscle = mus;
 	}
 
 	@Override
@@ -71,5 +71,15 @@ public class ItemManager {
 	public HashMap<Muscle, List<String>> getHm() {
 		return hm;
 	}	
+	
+	//get all muscle names
+	public List<Muscle> getMuscleList() {
+		List<Muscle> musList = new ArrayList<Muscle>();
+		for (Muscle m : hm.keySet()) {
+			musList.add(m);
+		}
+		return musList;
+	}
+	
 	
 }

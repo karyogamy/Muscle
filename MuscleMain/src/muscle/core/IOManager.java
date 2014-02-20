@@ -11,6 +11,7 @@ import java.io.Writer;
 import java.text.DateFormat;
 import java.text.ParseException;
 import java.util.Date;
+import java.util.List;
 
 public class IOManager {
 
@@ -24,10 +25,13 @@ public class IOManager {
 		save = new File(saveLoc);
 		items = new File(itemLoc);
 		this.im = new ItemManager();
+		readItems();
+		
 		this.pm = new ProfileManager();
+		readProfile();
 	}
 	
-	public void readItems() {
+	private void readItems() {
 		if(items.exists() && !items.isDirectory() && items.canRead()) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(items));
@@ -47,7 +51,7 @@ public class IOManager {
 		}
 	}
 	
-	public void readProfile() {
+	private void readProfile() {
 		if(save.exists() && !save.isDirectory() && save.canRead()) {
 			try {
 				BufferedReader br = new BufferedReader(new FileReader(save));
@@ -87,7 +91,7 @@ public class IOManager {
 				
 				out.close();
 				//Use this here, but add refresh GUI on call 
-				this.pm.addLog(d, m);
+				refreshProfile();
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -100,5 +104,14 @@ public class IOManager {
 	
 	public int timesMuscleUsed(int dayConst, Muscle m) {
 		return this.pm.timesMuscleUsed(dayConst, m);
+	}
+	
+	public List<Muscle> getMuscleList() {
+		return this.im.getMuscleList();
+	}
+	
+	public void refreshProfile() {
+		this.pm = new ProfileManager();
+		readProfile();
 	}
 }
