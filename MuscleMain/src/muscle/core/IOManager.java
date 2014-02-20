@@ -54,9 +54,9 @@ public class IOManager {
 				String line;
 				while ((line = br.readLine()) != null) {
 					String[] content = line.split(delim);
-					DateFormat df = DateFormat.getDateInstance(DateFormat.DEFAULT);
+					DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 					Date d = df.parse(content[0]);
-					pm.addLog(new Log(d, new Muscle(content[1])));
+					pm.addLog(d, new Muscle(content[1]));
 				}
 				br.close();
 			} catch (FileNotFoundException e) {
@@ -78,15 +78,16 @@ public class IOManager {
 				String line;
 				
 				Date d = new Date();
+				DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 				
-				line = d.toString()+delim+m.toString();
+				line = df.format(d)+delim+m.toString();
 				
 				Writer out = new BufferedWriter(new FileWriter(save, true));
 				out.append(line+"\n");
 				
 				out.close();
-				//add this in GUIManager instead of here
-				//this.pm.addLog(new Log(d, m));
+				//Use this here, but add refresh GUI on call 
+				this.pm.addLog(d, m);
 			} catch (FileNotFoundException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
@@ -95,5 +96,9 @@ public class IOManager {
 				e.printStackTrace();
 			}
 		}
+	}
+	
+	public int timesMuscleUsed(int dayConst, Muscle m) {
+		return this.pm.timesMuscleUsed(dayConst, m);
 	}
 }

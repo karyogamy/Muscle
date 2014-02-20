@@ -1,64 +1,61 @@
 package muscle.core;
 
+import java.util.ArrayList;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.HashSet;
+import java.util.HashMap;
+import java.util.List;
 
-class Log {
-	Date date;
-	Muscle mus;
-	
-	Log (Date d, Muscle m) {
-		this.date = d;
-		this.mus = m;
-	}
-	
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((date == null) ? 0 : date.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		Log other = (Log) obj;
-		if (date == null) {
-			if (other.date != null)
-				return false;
-		} else if (!date.equals(other.date))
-			return false;
-		return true;
-	}
-
-	public String toString() {
-		return date+","+mus;
-	}
-}
 
 public class ProfileManager {
 
-	private HashSet<Log> lSet;
-	
+	private HashMap<Date, List<Muscle>> lSet;
+
 	public ProfileManager() {
-		lSet = new HashSet<Log>();
+		lSet = new HashMap<Date, List<Muscle>>();
 	}
 
-	public HashSet<Log> getlSet() {
+	public HashMap<Date, List<Muscle>> getlSet() {
 		return lSet;
 	}
-	
+
 	//ret true if add is successful
-	public boolean addLog(Log l) {
-		if (!lSet.contains(l)) {
-			lSet.add(l);
+	public boolean addLog(Date d, Muscle m) {
+		if (!lSet.containsKey(d)) {
+			ArrayList<Muscle> mList = new ArrayList<Muscle>();
+			mList.add(m);
+			lSet.put(d, mList);
+			return true;
+		} else if (lSet.containsKey(d) && !lSet.get(d).contains(m)) {
+			List<Muscle> mList = lSet.get(d);
+			mList.add(m);
+			lSet.put(d, mList);
 			return true;
 		} else return false;
 	}
+
+	//check if muscle is used in the number of days prior today
+	//we can create a faster impl. by counting the last numbers of lines
+	//and check if the date is present in those lines.
+	public int timesMuscleUsed(int day, Muscle m) {
+		Calendar cal = Calendar.getInstance();
+		cal.set(Calendar.HOUR_OF_DAY, 0);
+		cal.set(Calendar.MINUTE, 0);
+		cal.set(Calendar.SECOND, 0);
+		cal.set(Calendar.MILLISECOND, 0);
+	    
+		int timesUsed = 0;
+		for (;day>0;day--) {
+			cal.add(Calendar.HOUR, -24);
+			if (lSet.containsKey(cal.getTime())){
+				if (lSet.get(cal).contains(m))
+					timesUsed++;				
+			} else break;
+		}
+
+		return timesUsed;
+	}
+	
+	
+	
 }
