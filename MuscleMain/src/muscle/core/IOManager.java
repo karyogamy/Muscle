@@ -10,8 +10,8 @@ import java.io.IOException;
 import java.io.Writer;
 import java.text.DateFormat;
 import java.text.ParseException;
+import java.util.Calendar;
 import java.util.Date;
-import java.util.List;
 
 public class IOManager {
 
@@ -20,9 +20,19 @@ public class IOManager {
 	private final String delim = ",";
 	private ItemManager im;
 	private ProfileManager pm;
-	
+
 	public IOManager(String saveLoc, String itemLoc) {
 		save = new File(saveLoc);
+		if(!save.exists()) {
+			File f = new File(saveLoc);
+			try {
+				f.createNewFile();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+		
 		items = new File(itemLoc);
 		this.im = new ItemManager();
 		readItems();
@@ -38,16 +48,23 @@ public class IOManager {
 				String line;
 				while ((line = br.readLine()) != null) {
 					String[] content = line.split(delim);
-					im.addMuscleAct(content[0], content[1]);
+					//We can improve this later on to save space
+					//Not too much of a difference though (still O(n))
+					if (content.length == 2) {
+						im.addMuscleAct(content[0], content[1]);
+					} else {
+						System.err.println("Line corrupted - " + line);
+					}
 				}
 				br.close();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
+		} else {
+			System.err.println("Item file does not exist.");
 		}
 	}
 	
@@ -59,31 +76,45 @@ public class IOManager {
 				while ((line = br.readLine()) != null) {
 					String[] content = line.split(delim);
 					DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
-					Date d = df.parse(content[0]);
-					pm.addLog(d, new Muscle(content[1]));
+					try {
+						Date d;
+						d = df.parse(content[0]);
+						pm.addLog(d, new Muscle(content[1]));
+					}  catch (ParseException e) {
+						//if the line cannot be parsed, then it is ignored
+						//we can impl. file integrity correction later (minor speed up)
+						System.err.println("File corrupted - " + e.getMessage());
+					}
 				}
 				br.close();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			} catch (ParseException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
 			}
 		}
 	}
 	
-	public void updateProfile(Muscle m) {
+	public void updateProfile(Muscle m) {		
 		if(save.exists() && !save.isDirectory() && save.canRead()) {
 			try {
 				String line;
+				//possible borderline case, thus get time one every call
+				Calendar cal = Calendar.getInstance();
+				cal.set(Calendar.HOUR_OF_DAY, 0);
+				cal.set(Calendar.MINUTE, 0);
+				cal.set(Calendar.SECOND, 0);
+				cal.set(Calendar.MILLISECOND, 0);
 				
-				Date d = new Date();
+				Date d = cal.getTime();
+				
+				if (!pm.addLog(d, m)) {
+					return;
+				}
+				
 				DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
-				
+
 				line = df.format(d)+delim+m.toString();
 				
 				Writer out = new BufferedWriter(new FileWriter(save, true));
@@ -93,7 +124,6 @@ public class IOManager {
 				//Use this here, but add refresh GUI on call 
 				refreshProfile();
 			} catch (FileNotFoundException e) {
-				// TODO Auto-generated catch block
 				e.printStackTrace();
 			} catch (IOException e) {
 				// TODO Auto-generated catch block
@@ -102,13 +132,26 @@ public class IOManager {
 		}
 	}
 	
+	//TODO: I don't know if these getters are good or not for security
+	public ItemManager getIm() {
+		return im;
+	}
+
+	public ProfileManager getPm() {
+		return pm;
+	}
+	
+	//TODO: redundant function, deprecated
+	/*
 	public int timesMuscleUsed(int dayConst, Muscle m) {
 		return this.pm.timesMuscleUsed(dayConst, m);
 	}
 	
+	//TODO: redundant function, deprecated
 	public List<Muscle> getMuscleList() {
 		return this.im.getMuscleList();
 	}
+	*/
 	
 	public void refreshProfile() {
 		this.pm = new ProfileManager();

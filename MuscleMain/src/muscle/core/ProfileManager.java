@@ -10,7 +10,7 @@ import java.util.List;
 public class ProfileManager {
 
 	private HashMap<Date, List<Muscle>> pMap;
-
+	
 	public ProfileManager() {
 		pMap = new HashMap<Date, List<Muscle>>();
 	}
@@ -46,11 +46,12 @@ public class ProfileManager {
 	    
 		int timesUsed = 0;
 		for (;day>0;day--) {
-			cal.add(Calendar.HOUR, -24);
-			if (pMap.containsKey(cal.getTime())){
-				if (pMap.get(cal).contains(m))
+			Date d = cal.getTime();
+			if (pMap.containsKey(d)){
+				if (pMap.get(d).contains(m))
 					timesUsed++;				
 			} else break;
+			cal.add(Calendar.HOUR, -24);
 		}
 
 		return timesUsed;
