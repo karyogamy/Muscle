@@ -53,6 +53,8 @@ public class IOManager {
 					if (content.length == 2) {
 						im.addMuscleAct(content[0], content[1]);
 					} else {
+						//if the line cannot be parsed in the above format
+						//it is ignored
 						System.err.println("Line corrupted - " + line);
 					}
 				}
