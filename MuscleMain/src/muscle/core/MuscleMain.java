@@ -1,7 +1,12 @@
 package muscle.core;
 
+import java.text.DateFormat;
+
+
 public class MuscleMain {
 	  
+	public static final DateFormat SHORT_DATE = DateFormat.getDateInstance(DateFormat.SHORT);
+	
 	public static void main(String[] args) {
 		//Wrapper 
 		//GUI contains I/O which contains IM and PM

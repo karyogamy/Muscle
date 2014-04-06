@@ -57,6 +57,8 @@ public class ProfileManager {
 		return timesUsed;
 	}
 	
-	
+	public List<Date> getListOfDate() {
+		return new ArrayList<Date>(this.pMap.keySet());
+	}
 	
 }

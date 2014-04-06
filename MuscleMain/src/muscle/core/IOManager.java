@@ -77,10 +77,9 @@ public class IOManager {
 				String line;
 				while ((line = br.readLine()) != null) {
 					String[] content = line.split(delim);
-					DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 					try {
 						Date d;
-						d = df.parse(content[0]);
+						d = MuscleMain.SHORT_DATE.parse(content[0]);
 						pm.addLog(d, new Muscle(content[1]));
 					}  catch (ParseException e) {
 						//if the line cannot be parsed, then it is ignored
