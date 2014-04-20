@@ -47,11 +47,11 @@ public class ProfileManager {
 		int timesUsed = 0;
 		for (;day>0;day--) {
 			Date d = cal.getTime();
+			cal.add(Calendar.HOUR, -24);
 			if (pMap.containsKey(d)){
 				if (pMap.get(d).contains(m))
 					timesUsed++;				
-			} else break;
-			cal.add(Calendar.HOUR, -24);
+			} else continue;
 		}
 
 		return timesUsed;

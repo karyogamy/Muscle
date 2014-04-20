@@ -97,7 +97,8 @@ public class IOManager {
 		}
 	}
 	
-	public void updateProfile(Muscle m) {		
+	public String updateProfile(Muscle m) {		
+		String date = null;
 		if(save.exists() && !save.isDirectory() && save.canRead()) {
 			try {
 				String line;
@@ -111,15 +112,16 @@ public class IOManager {
 				Date d = cal.getTime();
 				
 				if (!pm.addLog(d, m)) {
-					return;
+					return date;
 				}
 				
 				DateFormat df = DateFormat.getDateInstance(DateFormat.SHORT);
 
-				line = df.format(d)+delim+m.toString();
+				date = df.format(d);
+				line = date+delim+m.toString();
 				
 				Writer out = new BufferedWriter(new FileWriter(save, true));
-				out.append(line+"\n");
+				out.append(line + MuscleMain.LINE_BREAK);
 				
 				out.close();
 				//Use this here, but add refresh GUI on call 
@@ -131,6 +133,7 @@ public class IOManager {
 				e.printStackTrace();
 			}
 		}
+		return date;
 	}
 	
 	//TODO: I don't know if these getters are good or not for security
