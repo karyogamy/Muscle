@@ -55,7 +55,7 @@ public class ItemManager {
 	
 	//if add is successful, return true, else ret false
 	public boolean addMuscleAct(String mus, String act) {
-		mus = mus.toLowerCase();
+//		mus = mus.toLowerCase();
 		Muscle m = new Muscle(mus);
 		if (!hm.containsKey(m)) {
 			List<String> actList = new ArrayList<String>();
@@ -76,7 +76,7 @@ public class ItemManager {
 	//should not be called publicly
 	private void addActivityMus(String act, Muscle mus) {
 		//all activities kept in lowercase
-		act = act.toLowerCase();
+//		act = act.toLowerCase();
 		if (!am.containsKey(act)) {
 			List<Muscle> musList = new ArrayList<Muscle>();
 			musList.add(mus);

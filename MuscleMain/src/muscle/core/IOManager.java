@@ -136,6 +136,23 @@ public class IOManager {
 		return date;
 	}
 	
+	void createWorkout(String s) {		
+		if(items.exists() && !items.isDirectory() && items.canRead()) {
+			try {
+				Writer out = new BufferedWriter(new FileWriter(items, true));
+				out.append(s + MuscleMain.LINE_BREAK);
+				out.close();
+				//Use this here, but add refresh GUI on call 
+				refreshProfile();
+			} catch (FileNotFoundException e) {
+				e.printStackTrace();
+			} catch (IOException e) {
+				// TODO Auto-generated catch block
+				e.printStackTrace();
+			}
+		}
+	}
+	
 	//TODO: I don't know if these getters are good or not for security
 	public ItemManager getIm() {
 		return im;
@@ -160,5 +177,6 @@ public class IOManager {
 	public void refreshProfile() {
 		this.pm = new ProfileManager();
 		readProfile();
+		readItems();
 	}
 }

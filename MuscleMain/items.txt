@@ -1,17 +1,10 @@
-efaeag,fagea
-feageadsgvearf
+Chest,Pushups
+Triceps,Pushups
+Core,Situps
+Quads,Running
+Calves,Running
+Core,Squats
+Back,Squats
+Back,Handstands
+Shoulders,Handstands
 
-geageageas
-gb,
-a
-bgsd
-ea,zgf
-ead,this
-ae
-g
-awe
-geaws
-h
-aewr
-hers
-zahg

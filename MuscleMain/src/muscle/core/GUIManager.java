@@ -9,12 +9,14 @@ import javax.swing.JLabel;
 import javax.swing.JList;
 import javax.swing.JScrollPane;
 import javax.swing.JTextArea;
+import javax.swing.JTextField;
 import javax.swing.ListSelectionModel;
 import javax.swing.SwingUtilities;
 import javax.swing.event.ListSelectionEvent;
 import javax.swing.event.ListSelectionListener;
 
 import java.awt.BorderLayout;
+import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.FlowLayout;
 import java.awt.event.ActionListener;
@@ -35,7 +37,7 @@ public class GUIManager {
 	private final JTextArea textArea2 = new JTextArea (10,35);
 	private JComboBox<String> dates;
 	
-	public GUIManager(IOManager io)
+	public GUIManager(final IOManager io)
 	{
 		this.io = io;
 		guiFrame = new JFrame();
@@ -108,6 +110,9 @@ public class GUIManager {
 						if (lsm.isSelectedIndex(i)) {
 							String selectedAct = actArray[i];
 							textArea2.setText(getMusInfo(selectedAct));
+							if(getMusInfo(selectedAct).contains("WARNING")){
+							textArea2.setBackground(Color.pink);}
+							else textArea2.setBackground(Color.white);
 							currAct = selectedAct;
 						}
 					}
@@ -132,8 +137,8 @@ public class GUIManager {
 
 		listPanel.add(confirmBut);
 
-		JButton changeViewBut = new JButton("CHANGE VIEW");
-
+		final JButton changeViewBut = new JButton("CHANGE VIEW");
+		
 		//The ActionListener class is used to handle the
 		//event that happens when the user clicks the button.
 		//As there is not a lot that needs to happen we can 
@@ -151,12 +156,55 @@ public class GUIManager {
 				comboPanel.setVisible(!comboPanel.isVisible());
 			}
 		});
-
+//		final JTextField wname = new JTextField("Enter workout name");
+//		final JTextField pmus = new JTextField("Enter primary muscle");
+//		final JTextField smus = new JTextField("Enter secondary muscle");
+//		final JButton ok = new JButton("OK");
+//		final JFrame addf = new JFrame();
+//		addf.add(wname);
+//		addf.add(pmus);
+//		addf.add(smus);
+//		addf.add(ok);
+		
+//		ok.addActionListener(new ActionListener(){
+//			@Override
+//			public void actionPerformed(ActionEvent event){
+//				if(wname.getText().isEmpty() || pmus.getText().isEmpty()) {
+//					//If empty, return to normal screen.
+//					guiFrame.getContentPane().removeAll();	
+//					guiFrame.getContentPane().add(addf);
+//				}
+//				if(smus.getText().isEmpty()){
+//				io.createWorkout(wname.getText() + "," + pmus.getText());
+//				
+//				guiFrame.getContentPane().removeAll();	
+//				guiFrame.getContentPane().add(addf);
+//				}
+//				else{
+//					io.createWorkout(wname.getText() + "," + pmus.getText());
+//					io.createWorkout(wname.getText() + "," + smus.getText());
+//					guiFrame.getContentPane().removeAll();	
+//					guiFrame.getContentPane().add(addf);
+//				}
+//			}
+//		});
+//		
+//		JButton addWorkout = new JButton("Add Workout");
+//		addWorkout.addActionListener(new ActionListener(){
+//			@Override
+//			public void actionPerformed(ActionEvent event){
+//			guiFrame.getContentPane().removeAll();
+//			guiFrame.getContentPane().add(wname, BorderLayout.NORTH);
+//			guiFrame.getContentPane().add(pmus, BorderLayout.CENTER);
+//			guiFrame.getContentPane().add(smus,BorderLayout.SOUTH);	
+//			guiFrame.getContentPane().add(ok, BorderLayout.EAST);}
+//		});
 		//The JFrame uses the BorderLayout layout manager.
 		//Put the two JPanels and JButton in different areas.
 		guiFrame.getContentPane().add(comboPanel, BorderLayout.NORTH);
 		guiFrame.getContentPane().add(listPanel, BorderLayout.CENTER);
 		guiFrame.getContentPane().add(changeViewBut,BorderLayout.SOUTH);
+//		guiFrame.getContentPane().add(addWorkout, BorderLayout.EAST);
 
 		//make sure the JFrame is visible
 		guiFrame.setVisible(true);
